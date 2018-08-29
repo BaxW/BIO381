@@ -1,5 +1,5 @@
 ---
-title: "Homework"
+title: "Homepage"
 author: "Baxter Worthing"
 date: "8/29/2018"
 output: 
@@ -8,6 +8,9 @@ output:
 ---
 
 This site contains my homework and materials for Computational Biology, Fall 2018 
+
+### *A picture I took this summer*
+![](/Users/baxterworthing/Desktop/IMGP7306_edited.png)
 
 # My homeworks 
 
