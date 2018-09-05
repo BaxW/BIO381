@@ -9,14 +9,13 @@ output:
 
 This site contains my homework and materials for Computational Biology, Fall 2018 
 
-### *A picture I took this summer*
-![](/Users/baxterworthing/Desktop/IMGP7306_edited.png)
-
 # My homeworks 
 
 ### HW1
 
 * [Homework1]()
+
+* [Homework2](Homework2.html)
 
 # My links
 
