@@ -1,0 +1,71 @@
+---
+title: "Homework3"
+author: "Baxter Worthing"
+date: "9/12/2018"
+output: 
+  beamer_presentation: 
+    colortheme: beaver
+    incremental: yes
+    theme: Pittsburgh
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+##Introduction 
+
+- To begin our discussion of this paper, we should recall an important equation:
+
+- $$V_P = V_G + V_E$$
+
+- Total phenotypic variation is the sum of the contributions of genetic variation and environmental variation 
+
+- $$\mbox{Today we're going to focus on }V_E$$ 
+
+##Another Equation
+
+- $$V_E = V_{Eg} + V_{GxE} + V_{ES}$$
+- $$V_{Eg}:$$
+- General environmental varience 
+
+- $$V_{ES}:$$
+- Specific environmental varience 
+
+- $$V_{GxE}:$$
+- Genotype by environment interaction (what this paper was interested in)
+
+##Characterizing GxE
+
+- Regulatory Divergence 
+
+- Allele-specific Expression (ASE)
+
+##Main goals of this paper
+ >- \color{purple} "determine the prevalence of GxE interactions affecting the expression of native and non-native alleles"
+ 
+ >- \color{green} "characterize the relative contributions of cis and/or trans regulatory variation in expression divergence"
+ 
+ >- \color{blue} "establish the role of genome structure (e.g.inversions) in the evolution of potentially locally adaptive regulatory variation"
+ 
+ >- \color{orange} "identify candidate genes underlying local adaptation in this system"
+
+##Figure 1
+
+\begin{picture}(320,250)
+ \put(85,75){\includegraphics[height=6.5cm]{Gouldfig1}}
+ \put(00,60){\begin{minipage}[t]{1\linewidth}
+ {\tiny This is the first figure from this paper. A shows a map of the locations of their two transplant sites. B shows a picture of the blue location and C shows a picture of the red location. D compares the expression of coastal alleles at both sites, while E shows the same for inland allele. F shows the difference in survival between parental plants and F1 hybrids at each site.}
+ \end{minipage}}
+ \end{picture}
+ 
+ ##Figure 2
+ 
+  \begin{picture}(320,250)
+ \put(85,75){\includegraphics[height=6cm]{momkeyflower}}
+ \put(95,90){\begin{minipage}[t]{1\linewidth}
+ {\tiny\color{white}Here is a picture of the monkeyflower they were working with}
+ \end{minipage}}
+ \end{picture}
+ 
+
