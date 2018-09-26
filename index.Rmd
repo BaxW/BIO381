@@ -19,6 +19,10 @@ This site contains my homework and materials for Computational Biology, Fall 201
 
 * [Homework3](Homework3.pdf)
 
+* [Homework4](Homework4.pdf)
+
+* [Homework5](Homework5.pdf)
+
 # My links
 
 * [My Github repository](https://github.com/BaxW/BIO381)
@@ -30,3 +34,5 @@ This site contains my homework and materials for Computational Biology, Fall 201
 * [Rmarkdown cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
 
 * [prettydoc themes](http://yixuan.cos.name/prettydoc/themes.html)
+
+* [LaTex cheatsheet](https://www.nyu.edu/projects/beber/files/Chang_LaTeX_sheet.pdf)

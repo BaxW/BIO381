@@ -1,0 +1,84 @@
+---
+title: "Homework5"
+author: "Baxter Worthing"
+date: "9/26/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##question 1
+```
+150 observations 
+5 variables 
+```
+##question 2
+```
+iris.1 <- filter(iris, Species == "virginica" | Species == "versicolor", Sepal.Length > 2.5)
+
+100 observations
+5 variables
+```
+##question3
+```
+iris.2 <- select(iris.1, Species, Sepal.Length, Sepal.Width)
+
+100 observations 
+3 variables
+```
+
+##question4
+```
+iris.3 <- arrange(iris.2, desc(Sepal.Length))
+head(iris.3)
+ Species Sepal.Length Sepal.Width
+1 virginica          7.9         3.8
+2 virginica          7.7         3.8
+3 virginica          7.7         2.6
+4 virginica          7.7         2.8
+5 virginica          7.7         3.0
+6 virginica          7.6         3.0
+```
+##question5
+```
+iris.4 <- mutate(iris.3, Sepal.area = Sepal.Length*Sepal.Width)
+
+100 obervations
+4 variables
+```
+
+##question6
+```
+ iris.5 <- summarize(iris.4, meanLength = mean(Sepal.Length), meanWidth = mean(Sepal.Width), smapleSize = n())
+
+print(iris.5)
+  meanLength meanWidth smapleSize
+1      6.262     2.872        100
+```
+##question7
+```
+ iris.4 <- group_by(iris.4, Species)
+ 
+ iris.6 <- summarize(iris.4, meanLength = mean(Sepal.Length), meanWidth = mean(Sepal.Width), smapleSize = n())
+
+ print(iris.6)
+# A tibble: 2 x 4
+  Species    meanLength meanWidth smapleSize
+  <fct>           <dbl>     <dbl>      <int>
+1 versicolor       5.94      2.77         50
+2 virginica        6.59      2.97         50
+```
+
+##question8
+
+```
+ iris %>%
++ filter(iris, Species == "virginica" | Species == "versicolor", Sepal.Length > 2.5) %>%
++ select(iris.1, Species, Sepal.Length, Sepal.Width) %>%
++ arrange(iris.2, desc(Sepal.Length)) %>%
++ arrange(iris.2, desc(Sepal.Length)) %>%
++ group_by(iris.4, Species) %>%
++ summarize(iris.4, meanLength = mean(Sepal.Length), meanWidth = mean(Sepal.Width), smapleSize = n()) %>%
++ summarize(iris.4, meanLength = mean(Sepal.Length), meanWidth = mean(Sepal.Width), smapleSize = n()) -> iris6
