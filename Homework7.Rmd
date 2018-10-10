@@ -1,0 +1,107 @@
+---
+title: "Homework7"
+author: "Baxter Worthing"
+date: "10/10/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+###question 1
+```
+I have a dataset that contains raw RNAseq read counts. By raw, I mean the counts are not normalized by the length of the corresponding gene. Therefore, I would think that there would be a positive linear realationship between gene length and read count.
+
+```
+###question 2
+
+```
+The count data will have a higher standard deviation than the length data, they will have the same sample size and the means don't really matter in this context
+```
+
+###question3
+```{r}
+# set sample size 
+n <- 100
+#simulate length data 
+lenDat <- rnorm(n=n, mean=400, sd=100)
+
+#simulate counts that are correlated to length, but with measurment error
+
+error <- runif(n=n, min=.80, max = 1.25)
+
+countDat <- lenDat * .5
+
+coutDat <- countDat * error
+
+#simulate truly random counts
+
+#countDat <- rnorm(n=n, mean=500, sd=150)
+
+#combine everything, leaving a column for the classes 
+library(tidyverse)
+
+lenCat <- character(length= n)
+
+dat <- data.frame(countDat, lenDat, lenCat, stringsAsFactors = FALSE)
+
+# add to empty column in data so that it categorizes the lengths into long and short #I'm 100% sure there's an easier way to do this
+
+ rownum <- 0
+ meanLen <- mean(dat[,2])
+ 
+for (x in 1:length(dat[,2])) {
+  rownum <- 1 + rownum
+  if (dat[rownum,2] >= meanLen) {
+    dat[rownum,3] <- "LONG"
+  }else{
+    dat[rownum,3] <- "SHORT"
+  }
+}
+
+
+```
+
+###question 4
+
+```{r}
+#run ANOVA
+
+ANOmodel <- aov(countDat~lenCat, data=dat)
+summary(ANOmodel)
+
+#graph
+
+ANOplot <- ggplot(data=dat,
+                 aes(x=lenCat,y=countDat,
+                     fill=lenCat)) +
+  geom_boxplot()
+print(ANOplot) 
+
+```
+
+###question 5
+
+```
+There is basically no variation in the result each time I run it, but I would expect this
+
+```
+
+###question6
+
+```
+The way I have this set up, adjusting the mean does nothing. I will always get a significant difference between the two groups becasue I'm basing the count data on the length data. 
+
+When I generate  truly random count data (using the commented out command in question3) and try differnt means, I still never see a significant difference between the groups. (when n=100)
+
+I'm now realizing that a way better way to do this would have been to make a dataframe where I'm directly simulating the "LONG" and  "SHORT" datasets, rater than simulating data and breaking it up into long and short becasue the mean and sd of my counts and lengths don't actually matter here...
+
+```
+
+###question 7
+
+```
+working with the truly random count data, I was able to get a significant result when n=10 and n=15, so I definitly would need a sample size >15 for this type of analysis 
+
+```

@@ -25,6 +25,8 @@ This site contains my homework and materials for Computational Biology, Fall 201
 
 * [Homework6](Homework5.html)
 
+*[Homework7](Homework7.html)
+
 # My links
 
 * [My Github repository](https://github.com/BaxW/BIO381)
