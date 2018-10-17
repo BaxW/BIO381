@@ -1,0 +1,167 @@
+---
+title: "Homework8"
+author: "Baxter Worthing"
+date: "10/17/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#question1
+
+```{r}
+#save these to myfucntions.R so that they can be sourced easily
+
+##################################
+# FUNCTION: simulate data for two different length groups and count data
+# INPUTS: ample size, means and standard deviation
+# OUTPUTS: three simulated data sets: long gene lengths, short gene lengths and RNA-seq counts for those genes based on length
+#-------------------------
+
+dataSim <- function(n=100, meanLong=800, meanShort=400, sd=100) {
+  lenDatLong <- rnorm(n=n/2, mean=meanLong, sd=sd)
+  lenDatShort <- rnorm(n=n/2, mean=meanShort, sd=sd)
+  lenDat <- c(lenDatShort,lenDatLong) #combine the lengths 
+  error <- runif(n=n, min=.80, max = 1.25) # simulate RNA-seq error
+  countDat <- (lenDat * .5) * error # simulate counts
+  lenCat <- character(length= n) #make empty vector that will be used in next function 
+  dat <- data.frame(countDat, lenDat, lenCat, stringsAsFactors = FALSE) #put it all together 
+
+
+return(dat)
+}
+#-------------------------
+
+
+##################################
+# FUNCTION: take simulated data and split lengths into groups
+# INPUTS: dataset with lengths, counts and empty column for categories (long and short)
+# OUTPUTS: data frame with long and short groups specified in the third column 
+#-------------------------
+
+groupDat <- function(dat) {
+ rownum <- 0
+ meanLen <- mean(dat[,2])
+ for (x in 1:length(dat[,2])) {
+   rownum <- 1 + rownum
+   if (dat[rownum,2] >= meanLen) {
+     dat[rownum,3] <- "LONG"
+   }else{
+    dat[rownum,3] <- "SHORT"
+   }
+ }
+ return(dat)
+}
+#-------------------------
+
+
+##################################
+# FUNCTION: run ANOVA
+# INPUTS: data frame with one categorical (lenCat) and one continuous variable (countDat)
+# OUTPUTS: the summary of the ANOVA
+#-------------------------
+
+datAnova <- function(dat) {
+  
+
+ANOmodel <- aov(countDat~lenCat, data=dat)
+
+
+return(summary(ANOmodel))
+
+
+}
+#-------------------------
+
+##################################
+# FUNCTION: graph anova 
+# INPUTS: data frame with one categorical (lenCat) and one continuous variable (countDat)
+# OUTPUTS: box plot of the two groups
+#-------------------------
+
+datPlot <- function(dat) {
+ANOplot <- ggplot(data=dat,
+                 aes(x=lenCat,y=countDat,
+                     fill=lenCat)) +
+  geom_boxplot()
+ 
+
+
+print(ANOplot)
+}
+#-------------------------
+```
+ 
+## Here is the progam that links togehter all the above functions  
+```{r eval=FALSE}
+
+library(ggplot2)
+source("myFunctions.R") # (I saved the above finctions in this script)
+
+dataSim() -> x
+
+groupDat(x) -> x
+
+datAnova(x) -> mySummary
+
+datPlot(x) 
+
+```
+
+
+# now I'm modifying the last two functions so that I'm doing a linear regression instead of ANOVA 
+```{r}
+##################################
+# FUNCTION: do a linear regression of data
+# INPUTS: data frame with x variable in the first col and y in the second
+# OUTPUTS: regModel= the input data modeled as a linear regression
+#-------------------------
+
+linreg <- function(x) {
+
+regModel <- lm(x[,1]~x[,2], data=x)
+
+
+return(regModel)
+}
+#-------------------------
+
+
+
+
+
+###################################
+# FUNCTION: plot a linear regression
+# INPUTS: dataframe in which the first col is the x variable and second is the y
+# OUTPUTS: a plot of the regression
+#-------------------------
+
+linregPlot <- function(x) {
+  
+  regPlot <- ggplot(data=x,aes(x=x[,1],y=x[,2])) +
+           geom_point() +
+           stat_smooth(method=lm,se=0.99)  
+print(regPlot)
+}
+
+
+
+
+#-------------------------
+
+```
+# here is the updated program 
+
+```{r eval=FALSE}
+
+dataSim() -> x
+
+groupDat(x) -> x
+
+linreg(x) -> myLM
+
+linregPlot(x)
+
+```

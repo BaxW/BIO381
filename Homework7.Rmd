@@ -46,7 +46,8 @@ lenCat <- character(length= n)
 
 dat <- data.frame(countDat, lenDat, lenCat, stringsAsFactors = FALSE)
 
-# add to empty column in data so that it categorizes the lengths into long and short #I'm 100% sure there's an easier way to do this
+# add to empty column in data so that it categorizes the lengths into long and short 
+#I'm 100% sure there's an easier way to do this
 
  rownum <- 0
  meanLen <- mean(dat[,2])
