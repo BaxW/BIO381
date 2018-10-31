@@ -1,0 +1,170 @@
+---
+title: "Homework9"
+author: "Baxter Worthing"
+date: "10/24/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Question 1
+
+```{r}
+
+x <- rep(c(0,1,0),100)
+z <- 0
+for (i in x) {
+  if (i == 0)
+    z <- z +1
+  
+  }
+
+
+```
+
+#Question 2
+
+```{r}
+
+x <- rep(c(0,1,0),100)
+
+length(x[x==0])
+```
+
+
+#Question 3 
+
+```{r}
+
+y <- -5:10
+
+maxDiff <- function(y) {
+  diffs <- NULL
+  for (i in y) {
+    valDiff <- abs(i - y)
+    diffs <- c(diffs, valDiff)
+  }
+    answ <- max(diffs)
+    return(answ)
+}
+
+```
+
+#Question 4
+
+```{r}
+
+y <- -5:10
+
+maxDiff2 <- function(y) {
+ 
+  minVal <- min(y)
+  maxVal <- max(y)
+  
+ minMax <- c(minVal, maxVal)
+   
+ coord <- c(which(y==minVal),which(y==maxVal))
+  
+ valDiff <- abs(maxVal - minVal)
+   
+ out <- list(minMax, coord, valDiff)
+ 
+ return(out)
+  }
+  
+```
+
+#question 5
+
+```{r}
+
+y <- -5:10
+
+maxDiff3 <- function(y) {
+   temp <- 0
+  for (i in y) {
+    maxDiff <- max(abs(i-y))
+    if (maxDiff> temp) {
+      temp <- maxDiff
+  }
+  }
+   return(temp)
+}
+  
+```
+
+#question 6
+```{r}
+
+x <- 1:4
+dim(x) <- c(2,2)
+
+y <- 5:8
+dim(y) <- c(2,2)
+
+matMult <- function(x, y) {
+  numXRows <- 1:(nrow(x))
+     numYcols <- 1:(ncol(y))
+  if (length(numXRows) != length(numYcols)) {
+    stop("given matrices not of correct dimensions")
+   }else{
+     out <- vector()
+     num <- 1
+     for(r in numXRows) {
+       for (c in numYcols) {
+         out[num] <- sum(x[r,] * y[,c])
+         num <- num + 1
+       }
+     }
+   }
+     #now turn out into a matrix, (have to do byrow = true bc the way I sequentially put each value into it when it was a vector) 
+  out <- matrix(out, nrow= length(numXRows), ncol = length(numYcols), byrow = TRUE)
+  return(out)
+}
+
+```
+
+#Question 7
+
+```{r}
+
+makeMat <- function(x=round(runif(1, min = 1, max = 10),0),
+                    y=round(runif(1, min = 1, max = 10),0)) {
+
+# make matrix where evry value is its row number
+  mat <- matrix(nrow = x, ncol = y)
+  num <- 1
+  for (r in 1:nrow(mat)) {
+    mat[r,] <- num
+    num <- num + 1
+    
+  }
+  #now multiply each value by its column number 
+  num <- 1
+  for (c in 1: ncol(mat)) {
+    mat[,c] <- mat[,c] * num
+    num <- num + 1
+  }
+  return(mat)
+}
+```
+
+```{r}
+
+#possibly a better way to do above that I thought of right after
+
+makeMat <- function(x=round(runif(1, min = 1, max = 10),0),
+                    y=round(runif(1, min = 1, max = 10),0)) {
+  
+  rNum <- 1:x
+  cNum <- 1:y
+  mat <- matrix(nrow = x, ncol = y)
+  for (i in rNum) {
+    mat[i,] <- seq(i,y*i,cNum[i])
+  
+} 
+ return(mat)  
+} 
+```    
