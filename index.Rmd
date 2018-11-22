@@ -23,11 +23,17 @@ This site contains my homework and materials for Computational Biology, Fall 201
 
 * [Homework5](Homework5.pdf)
 
-* [Homework6](Homework5.html)
+* [Homework6](Homework6.html)
 
 * [Homework7](Homework7.html)
 
 * [Homework8](Homework8.html)
+
+* [Homework9](Homework9.html)
+
+* [Homework10](Homework10.html)
+
+* [Homework11](Homework11.html)
 
 
 ## My links

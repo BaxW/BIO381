@@ -1,0 +1,105 @@
+---
+title: "Homework11"
+author: "Baxter Worthing"
+date: "11/7/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(patchwork)
+library(wesanderson)
+
+#load my differential expression file
+
+read.table("real_DEseq.tab", sep = "\t", header = TRUE, stringsAsFactors = FALSE) ->dat
+
+
+#for some reason one of the columns I want to work with is being interpreted as a character string, so I need to change that 
+
+dat[,8] <- as.numeric(dat[,8]) 
+
+#check for NA values 
+complete.cases(dat[,8]) -> datComp
+
+# change NA to 0
+dat$neglog10pvalue[!datComp] <- 0
+
+# make a preliminary histogram of the (-log10 transformed) pvalues 
+qplot(x=dat$neglog10pvalue)
+
+# I want to make a new plot where the bars are different colors depending on if they are above or below my significance threshold (1.5)
+
+# add new column describing significance in a 
+for ( x in 1:nrow(dat)){
+  if (dat[x,8]> 1.5){
+    dat[x,9] <- "significant"
+}else{
+  dat[x,9] <- "insignificant"
+}
+}
+
+# give new column a descriptive name 
+colnames(dat)[9] <- "Signifcance"
+
+# now I can plot with color indicating significance 
+qplot(x=dat$neglog10pvalue, fill= dat$Signifcance)
+
+# I need to fix my labels
+
+dat$Signifcance -> Significance
+
+histo <- qplot(x=dat$neglog10pvalue, fill= Significance, main = "Transformed P-value Histogram", xlab = "-log10 P-value", ylab = "Frequency")
+histo + theme_classic() + scale_fill_manual(values = wes_palettes[["BottleRocket2"]])
+```
+
+The plot I just made is nice, but it only describes significance. I want to make a volcano plot that has information on significance and fold change:
+
+```{r}
+
+volc1 <- ggplot(data = dat,
+       mapping = aes(x=log2FoldChange, y=neglog10pvalue, color=Significance)) +
+  geom_point(size=.3) +
+  labs(title = " Expression Volcano Plot", x= "log2 Fold Change", y= "-log10 P-value")
+
+volc1
+
+# I like this plot, but I want to change the appearance a bit 
+
+
+volc1 + scale_color_manual(values=wes_palettes[["Royal1"]]) + theme_classic()
+
+```
+
+for my next plot I want to show the KEGG annotations that were differentially reperesented between my two treatmetns
+
+```{r}
+#get my data out of the excel file 
+kegg <- readxl::read_excel("KEGGedited.xlsx", sheet = 3)
+
+# make a double bar plot (one bar for each treatment)
+k1 <- ggplot(data = kegg, mapping = aes(x=KEGG_term, y=Number_of_genes, fill= Treatment)) +
+  geom_bar(position = "dodge", stat ="identity") +
+  labs(title = "KEGG Term Enrichment Between Treatments", y = "Number of genes", x =" KEGG term")
+k1 <- k1 + scale_fill_manual(values=wes_palettes[["Darjeeling2"]]) + theme_classic()
+
+# this would probably look better with the axes flipped...
+
+k1 + coord_flip() 
+
+```
+Looking at that graph, I'm realizing it might work better as a heatmap
+
+```{r}
+
+# make heatmap
+
+h1 <- ggplot(data =kegg, aes(y=KEGG_term, x= Treatment, fill=Number_of_genes))+
+  labs(main = "Kegg Term Heatmap", y= "KEGG term")
+   
+h1 + geom_tile() + scale_fill_gradientn(name= "Number of genes", colors= wes_palette("Zissou1", 100, type = "continuous")) + theme_classic() # should have just changed the column name when I made "kegg" but now I have to change the legend name useing name= 
+```
