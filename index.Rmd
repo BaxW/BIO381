@@ -35,6 +35,8 @@ This site contains my homework and materials for Computational Biology, Fall 201
 
 * [Homework11](Homework11.html)
 
+* [Final Project](FinalProj.html)
+
 
 ## My links
 

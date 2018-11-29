@@ -1,0 +1,148 @@
+---
+title: "FinalProj"
+author: "Baxter Worthing"
+date: "11/28/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+First things first:
+```{r}
+library(tidyverse)
+library(diffdf)
+```
+
+diffdf is, in the most basic sense, a package for comparing two data frames.
+
+It is very similar to a unix/linux command called diff:
+
+```{r}
+# make two objects containing three character strings that differ for one value
+x <- c("red", "white", "blue")
+y <- c("red", "white", "orange")
+# write objects to system files 
+write(x, file = "x.txt")
+write(y, file = "y.txt")
+# use the unix command `diff` to compare the two files 
+system("diff x.txt y.txt")
+
+#notice how the output shows you the difference between the two files 
+
+```
+
+There is an R function called diff(), but it's different:
+```{r}
+# make a matrix of values that increase by 1, by 2 and randomly 
+a <- seq(1,10) 
+b <- seq(1,20, by = 2)
+c <- rnorm(10)
+dat <- cbind(a,b,c)
+# use diff to ask what the difference is between each consecutive value in a column
+diff(dat)
+```
+
+So hopefully it's clear that diff() doesn't tell you what rows are different between two files.
+
+That said, there are a number of ways to do this with R, and my favorite is with the package diffdf
+
+```{r}
+library(diffdf)
+
+#make two tibbles that differ for a value
+# new data
+x <- presidential
+y <- x
+x
+
+# change parts of a row in y
+y[10,1] <- "Gore"
+y[10,4] <- "Democratic"
+y
+
+#check difference 
+diffdf(x,y)  # notice the output tells us how many differences, what the difference is and where it's located 
+
+y <- head(x,nrow(x) -2) # now y is missing two rows
+
+diffdf(x,y) # tells you which rows are missing 
+
+
+```
+
+What if files contain identical data but are sorted differently?
+
+```{r}
+
+# sort presidental data alphabetically 
+y <- arrange(x, name)
+
+diffdf(x,y) # returns many differences  
+
+# use "keys =" to tell the function what column to base it's comparison on (default in row numbers)
+
+diffdf(x, y, keys = "start") # returns no differences   
+
+```
+
+How do you easily subset the rows with issues?
+
+```{r}
+# chage the 10th row of Presidential data again 
+y <- x
+y[10,1] <- "Gore"
+y[10,4] <- "Democratic"
+
+#store output as object 
+xyDiff <- diffdf(x,y) 
+
+# get row with difference from x and y
+wrongRow <- diffdf_issuerows(y, xyDiff) 
+correctRow <- diffdf_issuerows(x, xyDiff)
+
+# fix issue 
+y[10,] <- correctRow
+
+```
+
+
+you can use the diffdf_has_issues to perform checks within a script 
+```{r}
+
+# simulate a data sets for two treatments (pos and neg) with two columns: IDs and random values 
+pos <- tibble(ID=LETTERS, val = runif(26))
+
+neg <- pos
+# make make b val column differ from a in the first three rows
+neg[1:3,2] <- neg[1:3,2] * runif(3)
+
+# write a function that takes two datasets in the format of the two we just made and checks to makes sure the IDs are the same before graphing only the values that differ between the two 
+
+graphDiff <- function(a,b){
+#check to make sure IDs are the same 
+ idDiff <- diffdf(a[,1],b[,1], keys = "ID", suppress_warnings = TRUE) 
+  if (diffdf_has_issues(idDiff)) { #  diffdf_has_issues will return TRUE if ID column has differences
+  print("Inputs do not have same IDs")
+  }else{
+#knowing that all IDs are the same, look for values that are different
+   valDiff <- diffdf(a,b, keys ="ID", suppress_warnings = TRUE) 
+  
+# make a tibble that has the ID of the rows that differ plus a column designating if they're from a or b
+   diffA <- diffdf_issuerows(a, valDiff)
+   diffA$treatment <- rep("Pos", nrow(diffA))
+   diffB <- diffdf_issuerows(b, valDiff)
+   diffB$treatment <- rep("Neg", nrow(diffB))
+  diffBoth <- as.tibble(rbind(diffA,diffB))
+     
+#make a double bar graph comparing only the values that differ between a and b
+  p1 <- ggplot(data = diffBoth, mapping = aes(x=ID, y=val, fill=treatment))+
+    geom_bar(position = "dodge", stat ="identity")
+     print(p1) 
+  }
+ 
+  }  
+
+graphDiff(pos,neg)
+```
