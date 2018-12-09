@@ -37,7 +37,7 @@ This site contains my homework and materials for Computational Biology, Fall 201
 
 * [Final Project](FinalProj.html)
 
-* [Final Project(markdown file)](FinalProj.Rmd)
+* [Final Project (markdown file)](FinalProj.Rmd)
 
 
 
